@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import { ObservationPointsInfo } from "./src/entities/observation-points-info.entity";
 import { WeatherData } from "./src/entities/weather-datum.entity";
 
 const dotenv = require("dotenv");
@@ -12,7 +13,8 @@ const dataSource = new DataSource({
   password: process.env.dbPassword,
   database: process.env.database,
   entities: [
-   WeatherData
+   WeatherData,
+   ObservationPointsInfo,
   ],
   migrations: [__dirname + "/src/migrations/*.ts"],
   charset: "utf8mb4",
