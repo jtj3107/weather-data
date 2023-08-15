@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Checkout source code.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -35,7 +35,7 @@ jobs:
         run: |
           pwd
           touch .env
-          echo DBPORT=${{ secrets.DBPORT }} >> .env
+          echo DBHOST=${{ secrets.DBHOST }} >> .env
           echo DATABASE=${{ secrets.DATABASE }} >> .env
           echo DBPASSWORD=${{ secrets.DBPASSWORD }} >> .env
           echo DBUSER=${{ secrets.DBUSER }} >> .env
@@ -47,3 +47,23 @@ jobs:
         run: |
           yarn
           yarn run build
+
+      - name: zip file
+        run: zip -r hous.zip ./dist ./scripts ./appspec.yml ./.env ./package.json
+
+      - name: AWS configure credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./hous.zip s3://weather.tj/deploy/
+
+      - name: deploy with AWS codeDeploy
+        run: aws deploy create-deployment
+          --application-name tj-code-deploy
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name GROUP
+          --s3-location bucket=weather.tj,bundleType=zip,key=deploy/hous.zip
