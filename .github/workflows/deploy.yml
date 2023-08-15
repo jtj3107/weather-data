@@ -30,6 +30,14 @@ jobs:
       - name: Check Npm -v
         run: npm -v
 
+      - name: Set env from secrets
+        run: |
+          echo "DBHOST=${{ secrets.DBHOST }}" >> $GITHUB_ENV
+          echo "DATABASE=${{ secrets.DATABASE }}" >> $GITHUB_ENV
+          echo "DBPASSWORD=${{ secrets.DBPASSWORD }}" >> $GITHUB_ENV
+          echo "DBUSER=${{ secrets.DBUSER }}" >> $GITHUB_ENV
+          echo "REACT_APP_KAKAO_MAP_APP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_APP_KEY }}" >> $GITHUB_ENV
+
       - name: create env file
         working-directory: ./
         run: |
@@ -41,18 +49,6 @@ jobs:
           echo DBUSER=${{ secrets.DBUSER }} >> .env
           echo REACT_APP_KAKAO_MAP_APP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_APP_KEY }} >> .env
           cat .env
-
-      - name: Check files in current directory
-        run: |
-          ls -al
-          cat .env
-
-      - name: Print Secret Value
-        run: |
-          echo ${{ secrets.DBHOST }}
-          echo ${{ secrets.DATABASE }}
-          echo ${{ secrets.DBPASSWORD }}
-          echo ${{ secrets.DBUSER }}
 
       - name: build server files
         working-directory: ./
