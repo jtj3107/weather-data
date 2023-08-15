@@ -34,18 +34,13 @@ jobs:
         working-directory: ./
         run: |
           pwd
-          touch .env.production
-          echo DBHOST=${{ secrets.DBHOST }} >> .env.production
-          echo DATABASE=${{ secrets.DATABASE }} >> .env.production
-          echo DBPASSWORD=${{ secrets.DBPASSWORD }} >> .env.production
-          echo DBUSER=${{ secrets.DBUSER }} >> .env.production
-          echo REACT_APP_KAKAO_MAP_APP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_APP_KEY }} >> .env.production
-          cat .env.production 
-
-      - name: Check files in current directory
-        run: |
-          ls -al
-          cat .env.production
+          touch .env
+          echo DBHOST=${{ secrets.DBHOST }} >> .env
+          echo DATABASE=${{ secrets.DATABASE }} >> .env
+          echo DBPASSWORD=${{ secrets.DBPASSWORD }} >> .env
+          echo DBUSER=${{ secrets.DBUSER }} >> .env
+          echo REACT_APP_KAKAO_MAP_APP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_APP_KEY }} >> .env
+          cat .env
 
       - name: build server files
         working-directory: ./
