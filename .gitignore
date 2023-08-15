@@ -38,7 +38,9 @@ lerna-debug.log*
 /src/migrations
 /src/migrations/*
 /src/migrations/migrations/*
-/.env
-.env
+/.env.local
+.env.local
+/.env.production
+.env.production
 
 /uploads

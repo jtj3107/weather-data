@@ -2,8 +2,10 @@ import { DataSource } from "typeorm";
 import { ObservationPointsInfo } from "./src/entities/observation-points-info.entity";
 import { WeatherData } from "./src/entities/weather-datum.entity";
 
-const dotenv = require("dotenv");
-dotenv.config();
+import * as dotenv from 'dotenv';
+
+const environment = process.env.NODE_ENV || 'local';
+dotenv.config({ path: `.env.${environment}` });
 
 const dataSource = new DataSource({
   type: "mysql",
