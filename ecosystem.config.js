@@ -1,10 +1,10 @@
-require('dotenv').config({ path: '.env.production' });
+require('dotenv').config(); 
 
 module.exports = {
     apps: [
         {
             name: "weather_backend",
-            script: "./dist/main.js",
+            script: "./dist/src/main.js",
             env: {
                 NODE_ENV: "production",
                 DBPORT: process.env.DBPORT,
