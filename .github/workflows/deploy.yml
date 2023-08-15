@@ -34,13 +34,13 @@ jobs:
         working-directory: ./
         run: |
           pwd
-          touch .env
-          echo DBPORT=${{ secrets.DBPORT }} >> .env
-          echo DATABASE=${{ secrets.DATABASE }} >> .env
-          echo DBPASSWORD=${{ secrets.DBPASSWORD }} >> .env
-          echo DBUSER=${{ secrets.DBUSER }} >> .env
-          echo REACT_APP_KAKAO_MAP_APP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_APP_KEY }} >> .env
-          cat .env
+          touch .env.production
+          echo DBHOST=${{ secrets.DBHOST }} >> .env.production
+          echo DATABASE=${{ secrets.DATABASE }} >> .env.production
+          echo DBPASSWORD=${{ secrets.DBPASSWORD }} >> .env.production
+          echo DBUSER=${{ secrets.DBUSER }} >> .env.production
+          echo REACT_APP_KAKAO_MAP_APP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_APP_KEY }} >> .env.production
+          cat .env.production 
 
       - name: build server files
         working-directory: ./
