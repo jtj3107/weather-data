@@ -47,6 +47,13 @@ jobs:
           ls -al
           cat .env
 
+      - name: Print Secret Value
+        run: |
+          echo ${{ secrets.DBHOST }}
+          echo ${{ secrets.DATABASE }}
+          echo ${{ secrets.DBPASSWORD }}
+          echo ${{ secrets.DBUSER }}
+
       - name: build server files
         working-directory: ./
         run: |
