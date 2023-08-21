@@ -7,7 +7,8 @@ on:
   push:
     branches: [develop]
   pull_request:
-    branches: [develop]
+    branches: [master]
+    types: [closed]
 
 jobs:
   build:
@@ -17,6 +18,11 @@ jobs:
       matrix:
         node-version: [18.17.0]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Check if PR was merged
+        if: github.event.pull_request.merged == true
+        run: echo "The PR was merged!"
 
     steps:
       - name: Checkout source code.
