@@ -5,4 +5,4 @@ cd $REPOSITORY
 
 sudo yarn
 
-sudo pm2 start ecosystem.config.js
+sudo pm2 start /home/ubuntu/build/ecosystem.config.js

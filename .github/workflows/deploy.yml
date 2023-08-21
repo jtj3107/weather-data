@@ -7,7 +7,8 @@ on:
   push:
     branches: [develop]
   pull_request:
-    branches: [develop]
+    branches: [master]
+    types: [closed]
 
 jobs:
   build:
@@ -17,6 +18,11 @@ jobs:
       matrix:
         node-version: [18.17.0]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Check if PR was merged
+        if: github.event.pull_request.merged == true
+        run: echo "The PR was merged!"
 
     steps:
       - name: Checkout source code.
@@ -29,6 +35,14 @@ jobs:
 
       - name: Check Npm -v
         run: npm -v
+
+      - name: Set env from secrets
+        run: |
+          echo "DBHOST=${{ secrets.DBHOST }}" >> $GITHUB_ENV
+          echo "DATABASE=${{ secrets.DATABASE }}" >> $GITHUB_ENV
+          echo "DBPASSWORD=${{ secrets.DBPASSWORD }}" >> $GITHUB_ENV
+          echo "DBUSER=${{ secrets.DBUSER }}" >> $GITHUB_ENV
+          echo "REACT_APP_KAKAO_MAP_APP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_APP_KEY }}" >> $GITHUB_ENV
 
       - name: create env file
         working-directory: ./
