@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { WeatherDataService } from './weather-data.service';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateWeatherDatumDto } from './dto/create-weather-datum.dto';
 import { UpdateWeatherDatumDto } from './dto/update-weather-datum.dto';
+import { WeatherDataService } from './weather-data.service';
 
 @Controller('weather-data')
 export class WeatherDataController {
@@ -9,6 +9,8 @@ export class WeatherDataController {
 
   @Post()
   create(@Body() createWeatherDatumDto: CreateWeatherDatumDto) {
+    console.log(111);
+
     return this.weatherDataService.create(createWeatherDatumDto);
   }
 
