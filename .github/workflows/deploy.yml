@@ -20,11 +20,6 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Check if PR was merged
-        if: github.event.pull_request.merged == true
-        run: echo "The PR was merged!"
-
-    steps:
       - name: Checkout source code.
         uses: actions/checkout@v3
 
@@ -32,6 +27,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Check if PR was merged
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+        run: echo "The PR was merged!"
 
       - name: Check Npm -v
         run: npm -v
