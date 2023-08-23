@@ -7,6 +7,8 @@ export class ObservationPointsInfoController {
 
   @Get()
   async saveObservationPoints() {
+    console.log('aa');
+    
     return this.observationPointsInfoService.saveObservationPoints();
   }
 
