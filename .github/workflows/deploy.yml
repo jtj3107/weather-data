@@ -52,7 +52,7 @@ jobs:
           cat .env
 
       - name: build server files
-        working-directory: ./
+        working-directory: weather-data/backend
         run: |
           yarn
           yarn run build
