@@ -11,7 +11,7 @@ on:
     types: [closed]
 
 jobs:
-  build:
+   backend_build_and_deploy:
     runs-on: ubuntu-22.04
 
     strategy:
@@ -76,3 +76,24 @@ jobs:
           --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name GROUP
           --s3-location bucket=weather.tj,bundleType=zip,key=deploy/hous.zip
+
+   frontend_build_and_deploy:
+    needs: backend_build_and_deploy # 이 스텝은 백엔드 배포 후 실행됨.
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        node-version: [18.17.0]
+
+    steps:
+      - name: Checkout source code.
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Upload build to S3
+        working-directory: weather-data/frontend
+        run: aws s3 sync ./out/ s3:::weather.tj/path/
