@@ -20,10 +20,6 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Check if PR was merged
-        if: github.event.pull_request.merged == true
-        run: echo "The PR was merged!"
-
       - name: Checkout source code.
         uses: actions/checkout@v3
 
