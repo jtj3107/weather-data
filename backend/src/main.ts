@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(80);
+  app.enableCors(); // CORS를 활성화합니다.
+  await app.listen(3000);
 }
 bootstrap();
