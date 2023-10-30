@@ -13,15 +13,13 @@ on:
 jobs:
    backend_build_and_deploy:
     runs-on: ubuntu-22.04
-
     strategy:
       matrix:
         node-version: [18.17.0]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
       - name: Checkout source code.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -42,7 +40,6 @@ jobs:
       - name: create env file
         working-directory: ./
         run: |
-          pwd
           touch .env
           echo DBHOST=${{ secrets.DBHOST }} >> .env
           echo DATABASE=${{ secrets.DATABASE }} >> .env
@@ -57,7 +54,7 @@ jobs:
           yarn
           yarn run build
 
-      - name: zip file
+      - name: zip server files
         run: zip -r hous.zip ./dist ./scripts ./appspec.yml ./.env ./package.json
 
       - name: AWS configure credentials
@@ -67,20 +64,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: upload to S3
+      - name: upload server files to S3
         run: aws s3 cp --region ap-northeast-2 ./hous.zip s3://weather.tj/deploy/
 
       - name: deploy with AWS codeDeploy
-        run: aws deploy create-deployment
-          --application-name tj-code-deploy
-          --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name GROUP
-          --s3-location bucket=weather.tj,bundleType=zip,key=deploy/hous.zip
+        run: |
+          aws deploy create-deployment --application-name tj-code-deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name GROUP --s3-location bucket=weather.tj,bundleType=zip,key=deploy/hous.zip
 
    frontend_build_and_deploy:
-    needs: backend_build_and_deploy # 이 스텝은 백엔드 배포 후 실행됨.
+    needs: backend_build_and_deploy
     runs-on: ubuntu-22.04
-
     strategy:
       matrix:
         node-version: [18.17.0]
@@ -94,26 +87,24 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies and build
+      - name: Install dependencies and build frontend
         working-directory: ./frontend
         run: |
           npm ci
           npm run build
 
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials for frontend
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Upload build to S3
-        working-directory: ./frontend/build
+      - name: Upload .next build to S3
+        working-directory: ./frontend/.next
         run: aws s3 sync ./ s3://weather.tj/path/
 
-        - name: Zip Next.js build
-          working-directory: ./frontend
-          run: zip -r frontend.zip .next
-
-        - name: Upload .next folder to S3
-          run: aws s3 cp --region ap-northeast-2 ./frontend/frontend.zip s3://weather.tj/deploy/
+      # public 폴더나 다른 리소스가 필요하면 아래와 같이 추가해서 업로드
+      - name: Upload public folder to S3
+        working-directory: ./frontend/public
+        run: aws s3 sync ./ s3://weather.tj/path/public/
