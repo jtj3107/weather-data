@@ -69,7 +69,7 @@ jobs:
 
       - name: deploy with AWS codeDeploy
         run: |
-          aws deploy create-deployment --application-name tj-code-deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name GROUP --s3-location bucket=weather-data-frontend,bundleType=zip,key=deploy/hous.zip
+          aws deploy create-deployment --application-name tj-code-deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name GROUP --s3-location bucket=weather.tj,bundleType=zip,key=deploy/hous.zip
 
    frontend_build_and_deploy:
     needs: backend_build_and_deploy
