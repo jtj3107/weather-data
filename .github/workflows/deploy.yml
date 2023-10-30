@@ -65,11 +65,11 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: upload server files to S3
-        run: aws s3 cp --region ap-northeast-2 ./hous.zip s3://weather.tj/deploy/
+        run: aws s3 cp --region ap-northeast-2 ./hous.zip s3://weather-data-frontend/deploy/
 
       - name: deploy with AWS codeDeploy
         run: |
-          aws deploy create-deployment --application-name tj-code-deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name GROUP --s3-location bucket=weather.tj,bundleType=zip,key=deploy/hous.zip
+          aws deploy create-deployment --application-name tj-code-deploy --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name GROUP --s3-location bucket=weather-data-frontend,bundleType=zip,key=deploy/hous.zip
 
    frontend_build_and_deploy:
     needs: backend_build_and_deploy
@@ -102,9 +102,9 @@ jobs:
 
       - name: Upload .next build to S3
         working-directory: ./frontend/.next
-        run: aws s3 sync ./ s3://weather.tj/path/
+        run: aws s3 sync ./ s3://weather-data-frontend/path/
 
       # public 폴더나 다른 리소스가 필요하면 아래와 같이 추가해서 업로드
       - name: Upload public folder to S3
         working-directory: ./frontend/public
-        run: aws s3 sync ./ s3://weather.tj/path/public/
+        run: aws s3 sync ./ s3://weather-data-frontend/path/public/
