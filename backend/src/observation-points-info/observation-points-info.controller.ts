@@ -9,7 +9,7 @@ export class ObservationPointsInfoController {
   async saveObservationPoints() {
     console.log('aa');
     
-    return this.observationPointsInfoService.saveObservationPoints();
+    //return this.observationPointsInfoService.saveObservationPoints();
   }
 
 }
