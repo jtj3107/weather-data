@@ -108,5 +108,5 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload build to S3
-          working-directory: ./frontend/build
-          run: aws s3 sync ./ s3://weather.tj/path/
+        working-directory: ./frontend/build
+        run: aws s3 sync ./ s3://weather.tj/path/
