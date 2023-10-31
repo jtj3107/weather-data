@@ -101,7 +101,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload .next build to S3
-        working-directory: ./frontend/.next
+        working-directory: ./frontend/out
         run: aws s3 sync ./ s3://weather-data-frontend/path/
 
       # public 폴더나 다른 리소스가 필요하면 아래와 같이 추가해서 업로드
